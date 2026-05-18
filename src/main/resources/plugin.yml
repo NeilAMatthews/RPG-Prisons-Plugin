@@ -1,0 +1,6 @@
+name: RPG-Prisons
+version: '${version}'
+
+main: neilamatthews.com.rPGPrisions.RPGPrisions
+api-version: '1.21.11'
+load: POSTWORLD
