@@ -13,6 +13,9 @@ import org.bukkit.scoreboard.*;
 import javax.swing.*;
 
 import static java.lang.Math.round;
+import static neilamatthews.com.rPGPrisions.Currency.OVERWORLD;
+import static neilamatthews.com.rPGPrisions.Currency.NETHER;
+import static neilamatthews.com.rPGPrisions.Currency.END;
 
 public class SideboardLogic {
 
@@ -56,27 +59,35 @@ public class SideboardLogic {
         title.numberFormat(NumberFormat.blank());
         title.customName(fakeGradient("  Portal Hopper"));
 
-        // assign each line to a variable to make the number disappear
-        Score line5 = objective.getScore("Balance: " + EconomyManager.getBalance(player));
-        line5.setScore(5);
-        line5.numberFormat(NumberFormat.blank());
+        // the currency section
+        Score currency = objective.getScore("Currencies");
+        currency.setScore(5);
+        currency.numberFormat(NumberFormat.blank());
+        currency.customName(MiniMessage.miniMessage().deserialize("<bold><gradient:#FFFFFF:#AAAAAA>Currencies</gradient></bold>"));
 
-        Score line4 = objective.getScore("Online: " + Bukkit.getOnlinePlayers().size());
-        line4.setScore(4);
-        line4.numberFormat(NumberFormat.blank());
 
-        Score line3 = objective.getScore("X-coord: " + round(player.getX()));
-        line3.setScore(3);
-        line3.numberFormat(NumberFormat.blank());
+        Score overworld = objective.getScore("overworld");
+        overworld.setScore(4);
+        overworld.numberFormat(NumberFormat.blank());
+        overworld.customName(MiniMessage.miniMessage().deserialize(
+                "  <blue>Overworld Currency: <white>" + EconomyManager.getBalance(player, Currency.OVERWORLD)
+        ));
 
-        Score line2 = objective.getScore("Y-coord: " + round(player.getY()));
-        line2.setScore(2);
-        line2.numberFormat(NumberFormat.blank());
+        Score nether = objective.getScore("nether");
+        nether.setScore(3);
+        nether.numberFormat(NumberFormat.blank());
+        nether.customName(MiniMessage.miniMessage().deserialize(
+                "  <red>Nether Currency: <white>" + EconomyManager.getBalance(player, Currency.NETHER)
+        ));
 
-        Score line1 = objective.getScore("Z-coord: " + round(player.getZ()));
-        line1.setScore(1);
-        line1.numberFormat(NumberFormat.blank());
+        Score end = objective.getScore("end");
+        end.setScore(2);
+        end.numberFormat(NumberFormat.blank());
+        end.customName(MiniMessage.miniMessage().deserialize(
+                "  <white>End Currency: " + EconomyManager.getBalance(player, Currency.END)
+        ));
 
+        // keep the bottom at the bottom
         Score bottom = objective.getScore("bottom");
         bottom.setScore(0);
         bottom.numberFormat(NumberFormat.blank());

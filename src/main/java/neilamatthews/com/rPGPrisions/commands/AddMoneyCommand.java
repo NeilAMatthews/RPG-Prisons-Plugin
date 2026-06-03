@@ -3,11 +3,13 @@ package neilamatthews.com.rPGPrisions.commands;
 
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import neilamatthews.com.rPGPrisions.Currency;
 import neilamatthews.com.rPGPrisions.EconomyManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,8 +18,8 @@ public class AddMoneyCommand implements BasicCommand{
     @Override
     public void execute(CommandSourceStack source, String[] args){
         // check to make sure we have the same amount of args
-        if(args.length != 2){
-            source.getSender().sendRichMessage("<red> Usage: /addmoney <player> <balance> ");
+        if(args.length != 3){
+            source.getSender().sendRichMessage("<red> Usage: /addmoney <player> <amount> <currency> ");
             return;
         }
 
@@ -40,12 +42,20 @@ public class AddMoneyCommand implements BasicCommand{
             source.getSender().sendRichMessage("<red> Amount must be greater than 0!");
         }
 
-        // the actual meat and potatoes of this command
-        EconomyManager.addBalance(target, amount);
+        // parse the currency
+        Currency currency;
+        try {
+            currency = Currency.valueOf(args[2].toUpperCase());
+        } catch (IllegalArgumentException e){
+            source.getSender().sendRichMessage("<red>Invalid currency! Use: Overworld, Nether, or End");
+            return;
+        }
+
+        EconomyManager.addBalance(target, currency, amount);
         EconomyManager.savePlayer(target);
 
-        source.getSender().sendRichMessage("<gold>Added<yellow> " + amount + " to " + target.getName() + "'s balance!");
-        target.sendRichMessage("<gold>You have received<gold> " + amount);
+        source.getSender().sendRichMessage("<green>Added <yellow>" + amount + " " + currency.name().toLowerCase() + "<green> to " + target.getName() + "'s balance!");
+        target.sendRichMessage("<green>You received <yellow>" + amount + " " + currency.name().toLowerCase() + "<green>!");
     }
 
     @Override
@@ -54,6 +64,12 @@ public class AddMoneyCommand implements BasicCommand{
             return Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
                     .filter(name -> name.toLowerCase().startsWith(args[0].toLowerCase()))
+                    .toList();
+        }
+        if (args.length == 3) {
+            return Arrays.stream(Currency.values())
+                    .map(c -> c.name().toLowerCase())
+                    .filter(c -> c.startsWith(args[2].toLowerCase()))
                     .toList();
         }
         return List.of();
