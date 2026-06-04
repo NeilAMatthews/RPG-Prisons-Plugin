@@ -52,6 +52,12 @@ public class RemoveMoneyCommand implements BasicCommand{
             return;
         }
 
+        //make sure the balance cant go below 0
+        if(!EconomyManager.hasBalance(target, currency, amount)){
+            source.getSender().sendRichMessage("<red>" + target.getName() + " doesn't have enough " + currency.name().toLowerCase() + "!");
+            return;
+        }
+
         EconomyManager.removeBalance(target, currency, amount);
         EconomyManager.savePlayer(target);
 

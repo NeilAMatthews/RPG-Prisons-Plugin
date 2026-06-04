@@ -8,19 +8,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class RPGPrisions extends JavaPlugin {
-
     @Override
     public void onEnable() {
         // Plugin startup logic
         getLogger().info("Plugin Enabled!");
-        getServer().getPluginManager().registerEvents(new ConnectionEvents(), this);
+        getServer().getPluginManager().registerEvents(new ConnectionEvents(this), this);
         EconomyManager.setup(getDataFolder());
 
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                SideboardLogic.setScoreboard(player);
+                SideboardLogic.updateScoreboard(player); // update not create
             }
-        }, 0L, 10L);
+        }, 0L, 20L);
 
         // commands
         registerCommand("addmoney", new AddMoneyCommand());

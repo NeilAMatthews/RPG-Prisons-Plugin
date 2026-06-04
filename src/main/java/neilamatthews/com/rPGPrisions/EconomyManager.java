@@ -60,7 +60,7 @@ public class EconomyManager {
 
     public static void setBalance(Player player, Currency currency, double amount){
         balances.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>())
-                .put(currency, amount);
+                .put(currency, Math.max(0, amount));
     }
 
     public static void addBalance(Player player, Currency currency, double amount){
@@ -68,7 +68,8 @@ public class EconomyManager {
     }
 
     public static void removeBalance(Player player, Currency currency, double amount){
-        setBalance(player, currency, getBalance(player, currency) - amount);
+        double current = getBalance(player, currency);
+        setBalance(player, currency, Math.max(0, current - amount));
     }
 
     public static boolean hasBalance(Player player, Currency currency, double amount){

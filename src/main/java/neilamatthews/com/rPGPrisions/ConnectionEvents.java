@@ -6,8 +6,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class ConnectionEvents implements Listener {
+
+    private final JavaPlugin plugin;
+
+    public ConnectionEvents(JavaPlugin plugin){
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
@@ -18,7 +25,7 @@ public class ConnectionEvents implements Listener {
         event.joinMessage(Component.text(event.getPlayer().getName() + " just joined!", NamedTextColor.GOLD));
 
         // gives each player who joins a scoreboard
-        SideboardLogic.setScoreboard(event.getPlayer());
+        SideboardLogic.createScoreboard(event.getPlayer());
 
         // set up the hash to store currency
         EconomyManager.loadPlayer(event.getPlayer());
@@ -28,6 +35,9 @@ public class ConnectionEvents implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event){
         // this reformats the server leave message
         event.quitMessage(Component.text(event.getPlayer().getName() + " just departed!", NamedTextColor.RED));
+
+        //remove scoreboard so it doesn't take up space
+        SideboardLogic.removeScoreboard(event.getPlayer());
 
         //save the player currencies
         EconomyManager.savePlayer(event.getPlayer());
