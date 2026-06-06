@@ -12,10 +12,14 @@ import java.util.UUID;
 
 public class EconomyManager {
 
+    //create a hash to store the player currencies in
     private static final HashMap<UUID, HashMap<Currency, Double>> balances = new HashMap<>();
+
+    // create a file shell to store all the players hashes in
     private static File file;
     private static FileConfiguration config;
 
+    // create + setup new file
     public static void setup(File dataFolder){
         file = new File(dataFolder, "balances.yml");
         if(!file.exists()){
@@ -25,6 +29,7 @@ public class EconomyManager {
         config = YamlConfiguration.loadConfiguration(file);
     }
 
+    // get the info from the file
     public static void loadPlayer(Player player) {
         UUID uuid = player.getUniqueId();
         HashMap<Currency, Double> playerBalances = new HashMap<>();
@@ -37,6 +42,7 @@ public class EconomyManager {
         balances.put(uuid, playerBalances);
     }
 
+    // store the info when the player completes a transaction or leaves the server
     public static void savePlayer(Player player){
         UUID uuid = player.getUniqueId();
         HashMap<Currency, Double> playerBalances = balances.get(uuid);

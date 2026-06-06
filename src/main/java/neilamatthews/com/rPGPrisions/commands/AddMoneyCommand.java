@@ -51,6 +51,7 @@ public class AddMoneyCommand implements BasicCommand{
             return;
         }
 
+        // the meat and potatoes
         EconomyManager.addBalance(target, currency, amount);
         EconomyManager.savePlayer(target);
 

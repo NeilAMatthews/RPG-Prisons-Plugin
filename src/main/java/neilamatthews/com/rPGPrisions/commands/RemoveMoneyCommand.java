@@ -58,6 +58,7 @@ public class RemoveMoneyCommand implements BasicCommand{
             return;
         }
 
+        // the meat and potatoes
         EconomyManager.removeBalance(target, currency, amount);
         EconomyManager.savePlayer(target);
 

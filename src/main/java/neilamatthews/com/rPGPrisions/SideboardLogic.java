@@ -42,7 +42,7 @@ public class SideboardLogic {
         FastBoard board = boards.get(player.getUniqueId());
         if (board == null) return;
 
-        // title - no black bar above it with FastBoard!
+        // title
         board.updateTitle(fakeGradient("  Portal Hopper"));
 
         // lines
